@@ -13,13 +13,25 @@ var satellite = L.tileLayer('https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y
     maxZoom: 19
 });
 
+
+
+
+var normal = L.tileLayer('https://api.maptiler.com/maps/backdrop/256/{z}/{x}/{y}.png?key=PWeLuquVKhaQ2pfv4rFj', {
+    attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>, Imagery © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
+});
+
+
+
+
 // 預設加載 OpenStreetMap 標準圖層
 streets.addTo(map);
 
 // 定義可切換的圖層
 var baseMaps = {
     "通用地圖": streets,
-    "衛星影像": satellite
+    "衛星影像": satellite,
+    "底圖":normal
 };
 
 // 添加圖層切換控制到地圖
@@ -39,4 +51,4 @@ function onMapClick(e) {
 
 // 綁定地圖點擊事件，當點擊地圖時添加標點
 map.on('click', onMapClick);
-    
+
