@@ -1,5 +1,5 @@
 // 初始化地圖，並設置預設視圖到特定的經緯度和縮放級別
-var map = L.map('map').setView([51.505, -0.09], 13);
+var map = L.map('map').setView([24.12529, 120.5804443], 15);
 
 // 添加 OpenStreetMap 標準圖層
 var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -18,8 +18,8 @@ streets.addTo(map);
 
 // 定義可切換的圖層
 var baseMaps = {
-    "Streets": streets,
-    "Satellite": satellite
+    "通用地圖": streets,
+    "衛星影像": satellite
 };
 
 // 添加圖層切換控制到地圖
