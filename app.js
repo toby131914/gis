@@ -23,6 +23,34 @@ var normal = L.tileLayer('https://api.maptiler.com/maps/backdrop/256/{z}/{x}/{y}
 
 
 
+// 從 MapTiler API 加載 GEOJSON 資料
+fetch('https://api.maptiler.com/data/eb2cbf95-54ec-49fa-884b-3d01e5ef5684/features.json?key=PWeLuquVKhaQ2pfv4rFj')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // 使用 L.geoJSON 方法將 GEOJSON 資料添加到地圖
+        L.geoJSON(data, {
+            // 可選：自定義樣式
+            style: function (feature) {
+                return { color: "#ff7800", weight: 2 };
+            },
+            // 綁定彈出視窗顯示屬性資料（如果有）
+            onEachFeature: function (feature, layer) {
+                if (feature.properties) {
+                    layer.bindPopup(JSON.stringify(feature.properties));
+                }
+            }
+        }).addTo(map);
+    })
+    .catch(error => console.error('Error loading GEOJSON:', error));
+
+
+
+
 
 // 預設加載 OpenStreetMap 標準圖層
 streets.addTo(map);
