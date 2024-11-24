@@ -80,3 +80,55 @@ function onMapClick(e) {
 // 綁定地圖點擊事件，當點擊地圖時添加標點
 map.on('click', onMapClick);
 
+
+
+// DMS 轉換為 Decimal Degrees
+function dmsToDecimal(degrees, minutes, seconds, direction) {
+    let dd = degrees + minutes / 60 + seconds / 3600;
+    if (direction === "S" || direction === "W") {
+        dd = -dd;
+    }
+    return dd;
+}
+
+// 搜尋並標示點位
+function searchAndMark(dmsLat, dmsLng) {
+    const lat = dmsToDecimal(dmsLat.degrees, dmsLat.minutes, dmsLat.seconds, dmsLat.direction);
+    const lng = dmsToDecimal(dmsLng.degrees, dmsLng.minutes, dmsLng.seconds, dmsLng.direction);
+
+    const marker = L.marker([lat, lng]).addTo(map);
+    marker.bindPopup(`Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`).openPopup();
+    map.setView([lat, lng], 15);
+}
+
+// 解析 DMS 座標字串
+function parseDMS(input) {
+    const regex = /(\d+)°(\d+)'(\d+)"([NSEW])/;
+    const matches = input.match(regex);
+
+    if (!matches) {
+        alert("DMS 格式無效！請使用類似 '25°3'50\"N' 的格式。");
+        return null;
+    }
+
+    return {
+        degrees: parseInt(matches[1], 10),
+        minutes: parseInt(matches[2], 10),
+        seconds: parseInt(matches[3], 10),
+        direction: matches[4]
+    };
+}
+
+// 處理搜尋動作
+function handleSearch() {
+    const latInput = document.getElementById("latDMS").value;
+    const lngInput = document.getElementById("lngDMS").value;
+
+    const latDMS = parseDMS(latInput);
+    const lngDMS = parseDMS(lngInput);
+
+    if (latDMS && lngDMS) {
+        searchAndMark(latDMS, lngDMS);
+    }
+}
+
