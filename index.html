@@ -11,6 +11,18 @@
 </head>
 <body>
     <h1>GIS 地理資訊情報系統</h1>
+
+    <div id="search">
+        <h3>搜尋並標點 (DMS 格式ex.20°3'50"N   111°34'0"E)</h3>
+        <label>緯度 (DMS): </label>
+        <input type="text" id="latDMS" placeholder="例如:25°3'50"N">
+        <label>經度 (DMS): </label>
+        <input type="text" id="lngDMS" placeholder="例如:121°34'0"E">
+        <button onclick="handleSearch()">搜尋</button>
+    </div>
+
+
+
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
