@@ -7,11 +7,22 @@ var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
     maxZoom: 19
 });
 
+
+
+
+
+
+
+
+
 // 添加衛星影像圖層（例如來自 Maptiler 或其他提供商）
 var satellite = L.tileLayer('https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=PWeLuquVKhaQ2pfv4rFj', {
     attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>, Imagery © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19
 });
+
+
+
 
 
 
@@ -51,9 +62,13 @@ fetch('https://api.maptiler.com/data/eb2cbf95-54ec-49fa-884b-3d01e5ef5684/featur
 
 
 
+   
 
-// 預設加載 OpenStreetMap 標準圖層
+
+
 streets.addTo(map);
+// 預設加載 OpenStreetMap 標準圖層
+
 
 // 定義可切換的圖層
 var baseMaps = {
@@ -62,8 +77,13 @@ var baseMaps = {
     "底圖":normal
 };
 
+
+
 // 添加圖層切換控制到地圖
 L.control.layers(baseMaps).addTo(map);
+
+
+
 
 // 允許標點功能
 function onMapClick(e) {
@@ -82,6 +102,10 @@ map.on('click', onMapClick);
 
 
 
+
+// 儲存標記點位的陣列
+let markedPoints = [];
+
 // DMS 轉換為 Decimal Degrees
 function dmsToDecimal(degrees, minutes, seconds, direction) {
     let dd = degrees + minutes / 60 + seconds / 3600;
@@ -96,9 +120,22 @@ function searchAndMark(dmsLat, dmsLng) {
     const lat = dmsToDecimal(dmsLat.degrees, dmsLat.minutes, dmsLat.seconds, dmsLat.direction);
     const lng = dmsToDecimal(dmsLng.degrees, dmsLng.minutes, dmsLng.seconds, dmsLng.direction);
 
+    // 添加標記到地圖
     const marker = L.marker([lat, lng]).addTo(map);
-    marker.bindPopup(`Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`).openPopup();
+    marker.bindPopup(`
+        Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}<br>
+        <button onclick="removeMarker(${lat}, ${lng})">刪除點位</button>
+    `).openPopup();
     map.setView([lat, lng], 15);
+
+    // 暫存點位資訊
+    markedPoints.push({
+        latitude: lat,
+        longitude: lng,
+        marker: marker
+    });
+
+    console.log("已暫存點位資訊:", markedPoints);
 }
 
 // 解析 DMS 座標字串
@@ -130,5 +167,44 @@ function handleSearch() {
     if (latDMS && lngDMS) {
         searchAndMark(latDMS, lngDMS);
     }
+}
+
+// 移除標記點位
+function removeMarker(lat, lng) {
+    const index = markedPoints.findIndex(point => point.latitude === lat && point.longitude === lng);
+
+    if (index !== -1) {
+        // 從地圖移除標記
+        map.removeLayer(markedPoints[index].marker);
+
+        // 從陣列中移除
+        markedPoints.splice(index, 1);
+
+        console.log("已移除點位:", { lat, lng });
+    } else {
+        alert("找不到指定的點位");
+    }
+}
+
+// 導出點位資料為 GeoJSON
+function exportToGeoJSON() {
+    const geoJSON = {
+        type: "FeatureCollection",
+        features: markedPoints.map(point => ({
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: [point.longitude, point.latitude]
+            },
+            properties: {}
+        }))
+    };
+
+    const dataStr = JSON.stringify(geoJSON, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "marked_points.geojson";
+    link.click();
 }
 
