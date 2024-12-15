@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GIS 地理資訊情報系統</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #map { height: 500px; }
@@ -24,9 +25,30 @@
         <button onclick="exportToGeoJSON()">匯出已標註點位</button>
     </div>
 
+
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="app.js"></script>
+
+
+    <table id="markedPointsTable">
+        <thead>
+            <tr>
+                <th>項次</th>
+                <th>緯度</th>
+                <th>經度</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 點位資料將由 JavaScript 動態生成 -->
+        </tbody>
+    </table>
+
+
+
+
 </body>
 </html>
+
