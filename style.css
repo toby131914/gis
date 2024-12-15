@@ -1,0 +1,31 @@
+table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+    }
+    table thead tr {
+        background-color: #f4efef;
+        color: #333;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+    .delete-btn {
+        background-color: #e74c3c;
+        color: rgb(245, 240, 240);
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    .delete-btn:hover {
+        background-color: #c0392b;
+    }
