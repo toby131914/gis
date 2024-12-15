@@ -115,6 +115,48 @@ function dmsToDecimal(degrees, minutes, seconds, direction) {
     return dd;
 }
 
+
+
+
+
+function updateTable() {
+    const tableBody = document.getElementById("markedPointsTable").querySelector("tbody");
+    tableBody.innerHTML = ""; // 清空表格內容
+
+    markedPoints.forEach((point, index) => {
+        const row = document.createElement("tr");
+
+        // 序號
+        const indexCell = document.createElement("td");
+        indexCell.textContent = index + 1;
+        row.appendChild(indexCell);
+
+        // 緯度
+        const latCell = document.createElement("td");
+        latCell.textContent = point.latitude.toFixed(6);
+        row.appendChild(latCell);
+
+        // 經度
+        const lngCell = document.createElement("td");
+        lngCell.textContent = point.longitude.toFixed(6);
+        row.appendChild(lngCell);
+
+        // 刪除按鈕
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "刪除";
+        deleteButton.classList.add("delete-btn");
+        deleteButton.onclick = () => removeMarker(point.latitude, point.longitude);
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+
+        tableBody.appendChild(row);
+    });
+}
+
+
+
+
 // 搜尋並標示點位
 function searchAndMark(dmsLat, dmsLng) {
     const lat = dmsToDecimal(dmsLat.degrees, dmsLat.minutes, dmsLat.seconds, dmsLat.direction);
@@ -136,6 +178,9 @@ function searchAndMark(dmsLat, dmsLng) {
     });
 
     console.log("已暫存點位資訊:", markedPoints);
+
+     // 更新表格
+     updateTable();
 }
 
 // 解析 DMS 座標字串
@@ -181,6 +226,10 @@ function removeMarker(lat, lng) {
         markedPoints.splice(index, 1);
 
         console.log("已移除點位:", { lat, lng });
+
+
+        // 更新表格
+        updateTable();
     } else {
         alert("找不到指定的點位");
     }
@@ -207,4 +256,3 @@ function exportToGeoJSON() {
     link.download = "marked_points.geojson";
     link.click();
 }
-
