@@ -15,6 +15,8 @@
 
     <div id="search">
         <h3>搜尋並標點 (DMS 格式ex.20°3'50"N   111°34'0"E)</h3>
+        <label>點位名稱: </label>
+        <input type="text" id="pointName" placeholder="輸入點位名稱">
         <label>緯度 (DMS): </label>
         <input type="text" id="latDMS" placeholder="例如:25°3'50"N">
         <label>經度 (DMS): </label>
@@ -36,15 +38,24 @@
         <thead>
             <tr>
                 <th>項次</th>
+                <th>名稱</th>
                 <th>緯度</th>
                 <th>經度</th>
-                <th>操作</th>
+                <th>刪除</th>
             </tr>
         </thead>
         <tbody>
             <!-- 點位資料將由 JavaScript 動態生成 -->
         </tbody>
     </table>
+
+
+
+
+</body>
+</html>
+
+
 
 
 
