@@ -1,4 +1,4 @@
-table {
+ table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
@@ -6,8 +6,8 @@ table {
         text-align: left;
     }
     table thead tr {
-        background-color: #f4efef;
-        color: #333;
+        background-color: #333;
+        color:#f4efef;
     }
     table, th, td {
         border: 1px solid #ddd;
