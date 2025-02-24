@@ -131,6 +131,12 @@ function updateTable() {
         indexCell.textContent = index + 1;
         row.appendChild(indexCell);
 
+
+        // 名稱
+        const nameCell = document.createElement("td");
+        nameCell.textContent = point.name || "未命名";
+        row.appendChild(nameCell);
+
         // 緯度
         const latCell = document.createElement("td");
         latCell.textContent = point.latitude.toFixed(6);
@@ -158,20 +164,23 @@ function updateTable() {
 
 
 // 搜尋並標示點位
-function searchAndMark(dmsLat, dmsLng) {
+function searchAndMark(name,dmsLat, dmsLng) {
     const lat = dmsToDecimal(dmsLat.degrees, dmsLat.minutes, dmsLat.seconds, dmsLat.direction);
     const lng = dmsToDecimal(dmsLng.degrees, dmsLng.minutes, dmsLng.seconds, dmsLng.direction);
 
     // 添加標記到地圖
     const marker = L.marker([lat, lng]).addTo(map);
     marker.bindPopup(`
-        Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}<br>
+        <strong>名稱:</strong> ${name}<br>
+        <strong>緯度:</strong> ${lat.toFixed(6)}<br>
+        <strong>經度:</strong> ${lng.toFixed(6)}<br>
         <button onclick="removeMarker(${lat}, ${lng})">刪除點位</button>
     `).openPopup();
     map.setView([lat, lng], 15);
 
     // 暫存點位資訊
     markedPoints.push({
+        name: name,
         latitude: lat,
         longitude: lng,
         marker: marker
@@ -203,14 +212,19 @@ function parseDMS(input) {
 
 // 處理搜尋動作
 function handleSearch() {
+
+    const nameInput = document.getElementById("pointName").value;
     const latInput = document.getElementById("latDMS").value;
     const lngInput = document.getElementById("lngDMS").value;
 
+    
     const latDMS = parseDMS(latInput);
     const lngDMS = parseDMS(lngInput);
 
     if (latDMS && lngDMS) {
-        searchAndMark(latDMS, lngDMS);
+        searchAndMark(nameInput || "未命名",latDMS, lngDMS);
+    } else {
+        alert("請確認 DMS 座標格式正確！");
     }
 }
 
@@ -256,3 +270,4 @@ function exportToGeoJSON() {
     link.download = "marked_points.geojson";
     link.click();
 }
+
